@@ -4,6 +4,8 @@ Bash scripts and instructions to submit a large batch of Guassian calculations o
 
 __Note__: The Imperial HPC queuing system only allows a user to submit 50 jobs at a time to the queue.
 
+This project is written for UNIX systems.
+
 ## Contents
 
 - `scripts/` Contains all of the bash shell scripts required.
@@ -106,4 +108,36 @@ __Note__: The Imperial HPC queuing system only allows a user to submit 50 jobs a
     ```
     $ bash reset_test.sh
     > Test reset.
+    ```
+
+## Converting output files to SDF
+
+1. Copy and paste the output files in `output/` to a local directory. This is because you cannot access Openbabel on the HPC.
+
+1. Ensure `obabel` is installed on your virtual environment.
+
+    ```
+    $ conda install -c conda-forge openbabel
+    ```
+
+1. _(Optional)_ In your working directory with all of the .log files, move all files to a new directory. This might make importing the `.sdf` files easier later on.
+
+    ```
+    $ mkdir <new_dir/>
+    $ mv *.log <new_dir/>
+    ```
+
+1. Use Openbabel in the Terminal to convert from `.log` to `.sdf`.
+
+    ```
+    $ obabel *.log -osdf -m
+    $ obabel <new_dir/>*.log -osdf -m
+    ```
+
+1. It is possible to convert to other file types. Search the type of input and output file types Openbabel accepts. The `-m` option is required when multiple files are being converted.
+
+    ```
+    $ obabel -L formats read
+    $ obabel -L formats write
+    $ obabel *.log -o<file_extension> -m
     ```
