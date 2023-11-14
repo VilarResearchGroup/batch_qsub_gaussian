@@ -16,14 +16,14 @@ This project is written for UNIX systems.
 1. Connect to the Imperial HPC via ssh in the terminal.
 
     ```
-    $ ssh <username>@login.hpc.imperial.ac.uk
+    ssh <username>@login.hpc.imperial.ac.uk
     ```
 
 1. Create and navigate to a new working directory.
 
     ```
-    $ mkdir <new_dir>
-    $ cd <new_dir>
+    mkdir <new_dir>
+    cd <new_dir>
     ```
 
 1. Copy no more than 50 Gaussian input files (.gjf) you wish to submit and paste into the new working directory.
@@ -34,27 +34,27 @@ This project is written for UNIX systems.
 
 1. Copy all scripts in `scripts/` and paste into the same working directory.
 
-   ```
-   cp scripts/* <new_dir>
-   ```
+    ```
+    cp scripts/*.sh <new_dir>
+    ```
 
 1. Submit jobs using the `batch_qsub.sh` script.
 
     ```
-    $ bash batch_qsub.sh
+    bash batch_qsub.sh
     ```
 
 1. View the status of jobs.
 
     ```
-    $ qstat
+    qstat
     ```
 
 1. Export Gaussian output files (.log) using the `export_output.sh` script when jobs are finished.
 
-   ```
-   $ bash export_output
-   ```
+    ```
+    bash export_output
+    ```
 
 1. All output files will be located in `output/`.
 
@@ -63,13 +63,18 @@ This project is written for UNIX systems.
 1. Navigate into `test_run/`.
 
     ```
-    $ cd test_run/
+    cd test_run/
     ```
 
 1. Execute the batch submission script.
 
     ```
-    $ bash batch_qsub.sh
+    bash batch_qsub.sh
+    ```
+
+    Example output:
+
+    ```
     > Submitting vilar_ethanol
     > <job_id>
     > Submitting vilar_iso_propanol
@@ -82,21 +87,36 @@ This project is written for UNIX systems.
 1. Check the status of the jobs.
 
     ```
-    $ qstat
+    qstat
+    ```
+
+    Example output:
+
+    ```
     > <output_table>
     ```
 
 1. Once all of the jobs have finished (approx. 10 min) execute export script.
 
     ```
-    $ bash export_output.sh
+    bash export_output.sh
+    ```
+
+    Example output:
+
+    ```
     > Exported 7 log files.
     ```
 
 1. Check the contents of `output/`.
 
     ```
-    $ ls output/
+    ls output/
+    ```
+
+    Example output:
+
+    ```
     > vilar_ethanol.log
     > vilar_iso_propanol.log
     > ...
@@ -106,7 +126,12 @@ This project is written for UNIX systems.
 1. To reset the test execute the reset script.
 
     ```
-    $ bash reset_test.sh
+    bash reset_test.sh
+    ```
+
+    Example output:
+
+    ```
     > Test reset.
     ```
 
@@ -117,27 +142,27 @@ This project is written for UNIX systems.
 1. Ensure `obabel` is installed on your virtual environment.
 
     ```
-    $ conda install -c conda-forge openbabel
+    conda install -c conda-forge openbabel
     ```
 
 1. _(Optional)_ In your working directory with all of the .log files, move all files to a new directory. This might make importing the `.sdf` files easier later on.
 
     ```
-    $ mkdir <new_dir/>
-    $ mv *.log <new_dir/>
+    mkdir <new_dir/>
+    mv *.log <new_dir/>
     ```
 
 1. Use Openbabel in the Terminal to convert from `.log` to `.sdf`.
 
     ```
-    $ obabel *.log -osdf -m
-    $ obabel <new_dir/>*.log -osdf -m
+    obabel *.log -osdf -m
+    obabel <new_dir/>*.log -osdf -m
     ```
 
 1. It is possible to convert to other file types. Search the type of input and output file types Openbabel accepts. The `-m` option is required when multiple files are being converted.
 
     ```
-    $ obabel -L formats read
-    $ obabel -L formats write
-    $ obabel *.log -o<file_extension> -m
+    obabel -L formats read
+    obabel -L formats write
+    obabel *.log -o<file_extension> -m
     ```
