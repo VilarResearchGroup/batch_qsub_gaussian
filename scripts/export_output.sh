@@ -1,12 +1,14 @@
 #!/bin/bash
 
-# Make new output directory
-mkdir output
+NORM=norm_term
+ERR=err_term
+mkdir $NORM $ERR
 
-# Copy all files in all directories with the extension .log into the output directory.
-cp ./*/*.log ./output/
+grep -rl "Normal termination" --include="*.log" |  xargs -I{} cp "{}" ${NORM}
+grep -rl "Error termination" --include="*.log" |  xargs -I{} cp "{}" ${ERR}
 
-# Count the number of files in the output directory.
-FILE_COUNT=$(ls output -1 --file-type | grep -v '/$' | wc -l)
+NORM_COUNT=$(find ${NORM} -type f -name '*.log' | wc -l)
+ERR_COUNT=$(find ${ERR} -type f -name '*.log' | wc -l)
 
-echo Exported $FILE_COUNT log files.
+echo Exported $NORM_COUNT log files with Normal Termination
+echo Exported $ERR_COUNT log files with Error Termination
