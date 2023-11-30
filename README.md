@@ -53,10 +53,10 @@ This project is written for UNIX systems.
 1. Export Gaussian output files (.log) using the `export_output.sh` script when jobs are finished.
 
     ```
-    bash export_output
+    bash export_output.sh
     ```
 
-1. All output files will be located in `output/`.
+1. All output files will be located in `norm_term/` or `err_term`.
 
 ## Test run
 
