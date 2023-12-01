@@ -50,13 +50,26 @@ This project is written for UNIX systems.
     qstat
     ```
 
+1. Another useful command is to list the number of output files (.log) are present in the working directory.
+
+    ```
+    find . -type f -iname "*.log" | wc -l
+    ```
+
+1. Alternatively, the number jobs that terminated normally or with errors can be counted.
+
+    ```
+    grep -rl "Normal termination" --include="*.log" --include="*.LOG" | wc -l
+    grep -rl "Error termination" --include="*.log" --include="*.LOG" | wc -l
+    ```
+
 1. Export Gaussian output files (.log) using the `export_output.sh` script when jobs are finished.
 
     ```
     bash export_output.sh
     ```
 
-1. All output files will be located in `norm_term/` or `err_term`.
+1. All output files will be located in either `norm_term/` or `err_term/`.
 
 ## Test run
 
