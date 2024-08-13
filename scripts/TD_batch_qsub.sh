@@ -8,6 +8,10 @@ FNAME=${F%.*}
 
 echo "Submitting ${FNAME}."
 
+# Convert chk to fchk (have .chk and .gjf file from geom_opt
+module load gaussian
+formchk ${FNAME}_opt.chk ${FNAME}_opt.fchk
+
 # Make new directory for current gjf.
 NEW_DIR="${FNAME}_opt"
 mkdir $NEW_DIR
@@ -15,8 +19,9 @@ mkdir $NEW_DIR
 # Move submission script subgauss.sh into each new directory and rename.
 cp subgauss.sh "$NEW_DIR/$FNAME.sh"
 
-# Move gjf into respective directory.
+# Move gjf and fchk into respective directory.
 mv $F "$NEW_DIR/$FNAME.gjf"
+mv "${FNAME}_opt.fchk" "$NEW_DIR/${FNAME}_opt.fchk"
 
 # Move into new gjf directory.
 cd $NEW_DIR
