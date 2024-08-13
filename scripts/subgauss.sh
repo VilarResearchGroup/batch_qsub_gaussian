@@ -17,11 +17,11 @@ cd gjob
 cp $PBS_O_WORKDIR/INPUT_NAME INPUT_NAME
 
 ## Grab chk files (if needed)
-if [ -z ${chkfile+x} ]
+if [ -z ${fchkfile+x} ]
   then
   echo "No checkpoint files to get!";
 else
-  cp $PBS_O_WORKDIR/$chkfile $chkfile;
+  cp $PBS_O_WORKDIR/$fchkfile $fchkfile;
 fi
 
 # Un(comment) to run G16
@@ -35,10 +35,10 @@ while ps -p $! &>/dev/null; do
 done
 
 # Once GDV is dne format up any *F.chk files
-count=`ls -1 *F.chk 2>/dev/null | wc -l`
+count=`ls -1 *F.fchk 2>/dev/null | wc -l`
 if [ $count != 0 ]
 then
-for x in *F.chk; do formchk $x; done;
+for x in *F.fchk; do formchk $x; done;
 fi
 
 # If ended up making a templog file - delete it
