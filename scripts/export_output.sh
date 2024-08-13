@@ -1,14 +1,14 @@
 #!/bin/bash
 
-NORM=norm_term
-ERR=err_term
-mkdir $NORM $ERR
+# Make new output directory
+mkdir output
 
-grep -rl "Normal termination" --include="*.log" --include="*.LOG" |  xargs -I{} cp "{}" ${NORM}
-grep -rl "Error termination" --include="*.log" --include="*.LOG" |  xargs -I{} cp "{}" ${ERR}
+# Copy all files in all directories with the extension .log .fchk .chk into the output directory.
+cp ./*/*.log ./output/
+cp ./*/*.chk ./output/
+cp ./*/*.fchk ./output/
 
-NORM_COUNT=$(find ${NORM} -type f -name '*.log' | wc -l)
-ERR_COUNT=$(find ${ERR} -type f -name '*.log' | wc -l)
+# Count the number of files in the output directory.
+FILE_COUNT=$(ls output -1 --file-type | grep -v '/$' | wc -l)
 
-echo Exported $NORM_COUNT log files with Normal Termination
-echo Exported $ERR_COUNT log files with Error Termination
+echo Exported $FILE_COUNT log files.
