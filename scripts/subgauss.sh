@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#PBS -lselect=1:ncpus=8:mem=100gb
-#PBS -lwalltime=72:00:00
+#PBS -lselect=1:ncpus=REPLACE_NCPUS:mem=REPLACE_MEM
+#PBS -lwalltime=REPLACE_WALLTIME
 #PBS -j oe
 #PBS -N INPUT_NAME
 
