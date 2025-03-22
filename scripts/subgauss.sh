@@ -60,4 +60,4 @@ fi
 # Final rsync of output files
 rsync -zarv --include '*.log' --include '*.fchk' --include '*.chk' --exclude '*' * $PBS_O_WORKDIR
 
-# Script written by Luke Moore and Don Danilov.
+# Script adapted from Luke Moore and Don Danilov's script.
