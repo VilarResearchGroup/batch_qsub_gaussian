@@ -1,9 +1,9 @@
 #!/bin/bash
 
-#PBS -lselect=1:ncpus=32:mem=13gb
+#PBS -lselect=1:ncpus=8:mem=100gb
 #PBS -lwalltime=72:00:00
 #PBS -j oe
-#PBS -N JOB_NAME
+#PBS -N INPUT_NAME
 
 echo "Job $PBS_JOBID started at $(date '+%A %W %Y %X') on $(cat $PBS_NODEFILE)"
 
@@ -14,39 +14,50 @@ mkdir gjob
 cd gjob
 
 ## Grab input file
-cp $PBS_O_WORKDIR/INPUT_NAME INPUT_NAME
+cp $PBS_O_WORKDIR/INPUT_NAME.gjf INPUT_NAME.gjf
 
-## Grab chk files (if needed)
-if [ -z ${chkfile+x} ]
-  then
-  echo "No checkpoint files to get!";
+export chkfile=INPUT_NAME.chk
+
+echo "This is the chkfile: $chkfile"
+echo
+
+## Only copy the chk file if it exists (restart-safe)
+if [ -f "$PBS_O_WORKDIR/$chkfile" ]; then
+    echo "Found existing chkfile, copying to scratch..."
+    cp "$PBS_O_WORKDIR/$chkfile" "$chkfile"
 else
-  cp $PBS_O_WORKDIR/$chkfile $chkfile;
+    echo "No existing chkfile found, starting fresh."
 fi
 
-# Un(comment) to run G16
+# Load Gaussian module and run
 module load gaussian/g16-c01-avx2
-g16 INPUT_NAME &
+g16 INPUT_NAME.gjf &
 
-# While job is running - every 10s grab the log file
+# While job is running - every 10s copy log and chk to work dir
 while ps -p $! &>/dev/null; do
-    for x in *.log; do cp $x $PBS_O_WORKDIR/INPUT_NAME.log_temp; done
+    for x in *.log; do
+        cp $x $PBS_O_WORKDIR/INPUT_NAME.log_temp
+    done
+
+    if test -f "$chkfile"; then
+        cp "$chkfile" "$PBS_O_WORKDIR/$chkfile"
+    fi
+
     sleep 10
 done
 
-# Once GDV is dne format up any *F.chk files
+# Once GDV is done, format any *F.chk files
 count=`ls -1 *F.chk 2>/dev/null | wc -l`
-if [ $count != 0 ]
-then
-for x in *F.chk; do formchk $x; done;
+if [ $count != 0 ]; then
+    for x in *F.chk; do formchk $x; done
 fi
 
-# If ended up making a templog file - delete it
+# Delete temp log if it exists
 if test -f $PBS_O_WORKDIR/INPUT_NAME.log_temp; then
     rm $PBS_O_WORKDIR/INPUT_NAME.log_temp
 fi
 
-# Rsync across the folder
+# Final rsync of output files
 rsync -zarv --include '*.log' --include '*.fchk' --include '*.chk' --exclude '*' * $PBS_O_WORKDIR
 
 # Script written by Luke Moore and Don Danilov.
