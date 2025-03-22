@@ -6,6 +6,26 @@ mem=100
 walltime="08:00:00"
 chkfile=""
 
+show_help() {
+  echo ""
+  echo "Usage: bash batch_qsub.sh [options]"
+  echo ""
+  echo "Options:"
+  echo "  -n, --ncpus [INT]         Number of CPUs per job (default: 8)"
+  echo "  -m, --mem [INT]           Memory in GB (default: 100)"
+  echo "  -w, --walltime [HH:MM:SS] Walltime (default: 08:00:00)"
+  echo "  -c, --chk [FILENAME]      Optional: checkpoint file to move into each job folder."
+  echo "                            If omitted, moves \$FNAME.chk by default."
+  echo "                            If used without argument, defaults to GJF_FILENAME.chk."
+  echo "  -h, --help                Show this help message and exit"
+  echo ""
+  echo "Job Sizing Reference:"
+  echo "  Imperial College London HPC Job Size Guide:"
+  echo "  https://icl-rcs-user-guide.readthedocs.io/en/latest/hpc/queues/job-sizing-guidance/"
+  echo ""
+  exit 0
+}
+
 # Parse CLI options
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -31,8 +51,12 @@ while [[ $# -gt 0 ]]; do
         shift 2
       fi
       ;;
+    -h|--help)
+      show_help
+      ;;
     *)
       echo "Unknown option: $1"
+      echo "Use -h or --help for usage instructions."
       exit 1
       ;;
   esac
