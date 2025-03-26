@@ -88,6 +88,10 @@ for F in *.gjf; do
   sed -i "s/REPLACE_MEM/${mem}gb/g" "$FNAME.sh"
   sed -i "s/REPLACE_WALLTIME/$walltime/g" "$FNAME.sh"
 
+  # Replace placeholders in gjf file
+  sed -i "s/REPLACE_NCPUS/${ncpus}/g" "$F"
+  sed -i "s/REPLACE_MEM/${mem}gb/g" "$F"
+
   qsub "$FNAME.sh"
   cd ../
 done
